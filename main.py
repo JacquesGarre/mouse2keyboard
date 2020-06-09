@@ -4,10 +4,10 @@ import win32con
 import win32gui
 import numpy as np
 from pygame.locals import *
-from pynput.keyboard import Key, Controller
 import time
 import os
 import sys
+import pyautogui
 
 # Config
 screen_height = 600
@@ -15,12 +15,12 @@ screen_width = 800
 lines_width = 1
 lines_color = (0,0,0)
 background_color = (255,255,255)
-refresh_rate = 0.03
+refresh_rate = 0.0005
 mapping = np.array(
     [
-        ["zq", "zz" , "zd" ],
-        ["qq", None , "dd" ],
-        ["qs", "ss" , "ds" ]
+        [ ['q','z'], ['z'] ,  ['d','z'] ],
+        [ ['q'], [] , ['d'] ],
+        [ ['q','s'], ['s'] , ['d','s'] ]
     ]
 )
 
@@ -31,9 +31,8 @@ def resource_path(relative_path):
         base_path = os.path.abspath(".")
     return os.path.join(base_path, relative_path)
 
-keyboard = Controller()
 pygame.init()
-pygame.display.set_caption('Mouse to keyboard directions')
+pygame.display.set_caption('Mouse position to keyboard input')
 screen = pygame.display.set_mode((screen_width, screen_height))
 done = False
 
@@ -42,20 +41,22 @@ hwnd = pygame.display.get_wm_info()["window"]
 win32gui.SetWindowLong(hwnd, win32con.GWL_EXSTYLE,
                        win32gui.GetWindowLong(hwnd, win32con.GWL_EXSTYLE) | win32con.WS_EX_LAYERED)
 win32gui.SetLayeredWindowAttributes(hwnd, win32api.RGB(*transparent), 0, win32con.LWA_COLORKEY)
-pressed_key = None
+pressed_keys = []
 launched = False
 
 while not done:
     if launched:
-        if pressed_key is not None:
-            keyboard.type(pressed_key)
+        if pressed_keys:
+            for pressed_key in pressed_keys:
+                pyautogui.keyDown(pressed_key)
         (x_mouse,y_mouse) = pygame.mouse.get_pos()
         mapping_col = int(x_mouse//(screen_width/3))
         mapping_line = int(y_mouse//(screen_height/3))
-        if pressed_key != mapping[mapping_line][mapping_col]:
-            pressed_key = mapping[mapping_line][mapping_col]
-            if pressed_key is not None:
-                keyboard.type(pressed_key)
+        if pressed_keys != mapping[mapping_line][mapping_col]:
+            if pressed_keys:
+                for pressed_key in pressed_keys:
+                    pyautogui.keyUp(pressed_key)
+            pressed_keys = mapping[mapping_line][mapping_col]
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -66,6 +67,8 @@ while not done:
                 print(launched)
 
     screen.fill(transparent) 
+
+
     pygame.draw.rect(screen, background_color, pygame.Rect(0, 0, screen_width, screen_height))
     pygame.draw.line(screen, lines_color, (screen_width/3, 0), (screen_width/3, screen_height), lines_width)
     pygame.draw.line(screen, lines_color, (screen_width/3*2, 0), (screen_width/3*2, screen_height), lines_width)
