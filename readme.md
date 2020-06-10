@@ -47,8 +47,8 @@
 
   
 
-- python main.py
+- python mouse2keyboard.py (Or mouse2keyboard.exe is available as ready-to-go in dist folder)
 
   
-
-- Right-click on the window to toggle (On/off) activation of keypresses
+  
+- press "P" on the red screen to pause/unpause the software
