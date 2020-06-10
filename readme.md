@@ -1,3 +1,6 @@
+## Video demo
+
+- https://gyazo.com/d71ccc216dbf3f6bee7a6f64d21788b2
 
 ## Description
 
@@ -33,9 +36,7 @@
 
 	- top-left (Z+Q), top-right (Z+D), etc...
 
-  
-
--  ![alt text](https://gyazo.com/d71ccc216dbf3f6bee7a6f64d21788b2)
+ 
 
   
 
