@@ -35,7 +35,7 @@
 
   
 
--  ![alt text](Screenshot_1.png)
+-  ![alt text](https://gyazo.com/d71ccc216dbf3f6bee7a6f64d21788b2)
 
   
 
